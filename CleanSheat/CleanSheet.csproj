@@ -6,8 +6,16 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <SignAssembly>true</SignAssembly>
-    <ApplicationIcon>noun_pine trees_966811 (1).ico</ApplicationIcon>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
     <AssemblyOriginatorKeyFile>TroyKDev.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="YamlDotNet" Version="11.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="rules\" />
+  </ItemGroup>
 
 </Project>
