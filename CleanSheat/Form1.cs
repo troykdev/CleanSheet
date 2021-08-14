@@ -28,7 +28,7 @@ namespace CleanSheet
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            _Stalker.Start();
+            _Stalker.Start(@"C:\Users\troyk\Desktop", @"C:\Users\troyk\Desktop\txt", @"*.txt");
 
             
         }

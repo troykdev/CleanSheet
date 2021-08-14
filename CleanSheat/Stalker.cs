@@ -11,12 +11,13 @@ namespace CleanSheet
 {
     class Stalker
     {
-        private Collection _RunningWatchers = new Collection();
+     
+        private FileSystemWatcher Watcher;
 
-        public void Start()
+        public void Start(string path, string moveTo, string filter)
         {
-            var _FileSystemWatcher = new FileSystemWatcher(@"C:\Users\troyk\Desktop");
-            _RunningWatchers.Add(_RunningWatchers);
+            var _FileSystemWatcher = new FileSystemWatcher(path);
+            Watcher = _FileSystemWatcher;
             _FileSystemWatcher.NotifyFilter = NotifyFilters.Attributes
                                  | NotifyFilters.CreationTime
                                  | NotifyFilters.DirectoryName
@@ -26,42 +27,28 @@ namespace CleanSheet
                                  | NotifyFilters.Security
                                  | NotifyFilters.Size;
 
-            _FileSystemWatcher.Changed += OnChanged;
-            _FileSystemWatcher.Created += OnCreated;
-            _FileSystemWatcher.Deleted += OnDeleted;
-            _FileSystemWatcher.Renamed += OnRenamed;
+            _FileSystemWatcher.Created += messageBoxHandler;
             _FileSystemWatcher.Error += OnError;
 
-            _FileSystemWatcher.Filter = "*.txt";
-            _FileSystemWatcher.IncludeSubdirectories = true;
+            _FileSystemWatcher.Filter = filter;
+            _FileSystemWatcher.IncludeSubdirectories = false;
             _FileSystemWatcher.EnableRaisingEvents = true;
 
             MessageBox.Show("test");
         }
 
-        public static void OnChanged(object sender, FileSystemEventArgs e)
+        public static void messageBoxHandler(object sender, FileSystemEventArgs e)
         {
-            if (e.ChangeType != WatcherChangeTypes.Changed)
-            {
-                return;
-            }
-            MessageBox.Show($"Changed: {e.FullPath}");
+            MessageBox.Show($"{e.ChangeType.ToString()}: {e.FullPath}");
         }
-
-        public static void OnCreated(object sender, FileSystemEventArgs e)
+        public static void moveHandler(object sender, FileSystemEventArgs e)
         {
-            string value = $"Created: {e.FullPath}";
-            Console.WriteLine(value);
+            MessageBox.Show($"{e.ChangeType.ToString()}: {e.FullPath}");
         }
-
-        public static void OnDeleted(object sender, FileSystemEventArgs e) =>
-            Console.WriteLine($"Deleted: {e.FullPath}");
-
-        public static void OnRenamed(object sender, RenamedEventArgs e)
+        public static void moveRenameHandler(object sender, FileSystemEventArgs e)
         {
-            Console.WriteLine($"Renamed:");
-            Console.WriteLine($"    Old: {e.OldFullPath}");
-            Console.WriteLine($"    New: {e.FullPath}");
+
+            MessageBox.Show($"{e.ChangeType.ToString()}: {e.FullPath}");
         }
 
         public static void OnError(object sender, ErrorEventArgs e) =>
