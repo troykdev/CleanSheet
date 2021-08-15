@@ -14,9 +14,9 @@ namespace CleanSheet
 {
     public partial class Form1 : Form
     {
-        Stalker _Stalker = new Stalker();
-
-
+        Stalker _StalkerSdf = new Stalker();
+        Stalker _StalkerZip = new Stalker();
+        Stalker _StalkerEvtx = new Stalker();
         public Form1()
         {
             InitializeComponent();
@@ -29,11 +29,19 @@ namespace CleanSheet
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            var _Rule = new WatcherRule();
-           
-            _Stalker.Start(_Rule);
+            var _RuleSdf = new WatcherRule();
+            _StalkerSdf.Start(_RuleSdf);
+            var _RuleZip = new WatcherRule();
+            _RuleZip.FilePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+            _RuleZip.MoveFilePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "ZIPs");
+            _RuleZip.Filter = "*.zip";
+            _StalkerZip.Start(_RuleZip);
+            var _RuleEvtx = new WatcherRule();
+            _RuleEvtx.FilePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+            _RuleEvtx.MoveFilePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "EVTXs");
+            _RuleEvtx.Filter = "*.evtx";
+            _StalkerEvtx.Start(_RuleEvtx);
 
-            
         }
 
         private void TrayIcon_Click(object sender, EventArgs e)
