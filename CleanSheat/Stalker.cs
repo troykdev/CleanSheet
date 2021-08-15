@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using System.Data;
+using System.Formats.Asn1;
 
 namespace CleanSheet
 {
@@ -13,10 +15,12 @@ namespace CleanSheet
     {
      
         private FileSystemWatcher Watcher;
-
-        public void Start(string path, string moveTo, string filter)
+        private WatcherRule Rules;
+        public void Start(WatcherRule _rules)
         {
-            var _FileSystemWatcher = new FileSystemWatcher(path);
+            Rules = _rules;
+            MessageBox.Show(Rules.FilePath);
+            var _FileSystemWatcher = new FileSystemWatcher(Rules.FilePath);
             Watcher = _FileSystemWatcher;
             _FileSystemWatcher.NotifyFilter = NotifyFilters.Attributes
                                  | NotifyFilters.CreationTime
@@ -27,29 +31,36 @@ namespace CleanSheet
                                  | NotifyFilters.Security
                                  | NotifyFilters.Size;
 
-            _FileSystemWatcher.Created += messageBoxHandler;
+            _FileSystemWatcher.Created +=  _rules.MoveFile ? moveFileHandler : messageBoxHandler;
             _FileSystemWatcher.Error += OnError;
 
-            _FileSystemWatcher.Filter = filter;
+            _FileSystemWatcher.Filter = Rules.Filter;
             _FileSystemWatcher.IncludeSubdirectories = false;
             _FileSystemWatcher.EnableRaisingEvents = true;
-
-            MessageBox.Show("test");
         }
 
         public static void messageBoxHandler(object sender, FileSystemEventArgs e)
         {
             MessageBox.Show($"{e.ChangeType.ToString()}: {e.FullPath}");
         }
-        public static void moveHandler(object sender, FileSystemEventArgs e)
+        private void moveFileHandler(object sender, FileSystemEventArgs e)
         {
-            MessageBox.Show($"{e.ChangeType.ToString()}: {e.FullPath}");
-        }
-        public static void moveRenameHandler(object sender, FileSystemEventArgs e)
-        {
+            
+            var _movePath = Path.Join(Rules.MoveFilePath, DateTime.Now.ToString("MMddyyyyhhmm"),  e.Name );
 
-            MessageBox.Show($"{e.ChangeType.ToString()}: {e.FullPath}");
+            Directory.CreateDirectory(Path.Join(Rules.MoveFilePath, DateTime.Now.ToString("MMddyyyyhhmm")));
+            try
+            {
+                File.Move(e.FullPath, _movePath);
+            } 
+            catch (Exception ex) 
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            
+           
         }
+   
 
         public static void OnError(object sender, ErrorEventArgs e) =>
             PrintException(e.GetException());

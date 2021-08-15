@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,9 +29,31 @@ namespace CleanSheet
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            _Stalker.Start(@"C:\Users\troyk\Desktop", @"C:\Users\troyk\Desktop\txt", @"*.txt");
+            var _Rule = new WatcherRule();
+           
+            _Stalker.Start(_Rule);
 
             
+        }
+
+        private void TrayIcon_Click(object sender, EventArgs e)
+        {
+          
+                ShowInTaskbar = true;
+                TrayIcon.Visible = false;
+                Show();
+
+
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                ShowInTaskbar = false;
+                TrayIcon.Visible = true;
+            }
+
         }
     }
 }
