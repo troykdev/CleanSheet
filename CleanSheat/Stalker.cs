@@ -1,4 +1,5 @@
 ﻿using System;
+using Serilog;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,13 +14,15 @@ namespace CleanSheet
 {
     class Stalker
     {
-     
+
         private FileSystemWatcher Watcher;
         private WatcherRule Rules;
-        public void Start(WatcherRule _rules)
+        public static ILogger Log = null;
+        public void Start(WatcherRule _rules, ILogger _log)
         {
+            Log = _log;
             Rules = _rules;
-            MessageBox.Show(Rules.FilePath);
+            Log.Information($"Stalker started for: {Rules.FilePath}");
             var _FileSystemWatcher = new FileSystemWatcher(Rules.FilePath);
             Watcher = _FileSystemWatcher;
             _FileSystemWatcher.NotifyFilter = NotifyFilters.Attributes
@@ -31,7 +34,8 @@ namespace CleanSheet
                                  | NotifyFilters.Security
                                  | NotifyFilters.Size;
 
-            _FileSystemWatcher.Created +=  _rules.MoveFile ? moveFileHandler : messageBoxHandler;
+            _FileSystemWatcher.Changed += this.moveFileHandler;
+            _FileSystemWatcher.Created += this.moveFileHandler;
             _FileSystemWatcher.Error += OnError;
 
             _FileSystemWatcher.Filter = Rules.Filter;
@@ -39,43 +43,56 @@ namespace CleanSheet
             _FileSystemWatcher.EnableRaisingEvents = true;
         }
 
-        public static void messageBoxHandler(object sender, FileSystemEventArgs e)
-        {
-            MessageBox.Show($"{e.ChangeType.ToString()}: {e.FullPath}");
-        }
-        private void moveFileHandler(object sender, FileSystemEventArgs e)
+        public void messageBoxHandler(object sender, FileSystemEventArgs e)
         {
             
-            var _movePath = Path.Join(Rules.MoveFilePath, DateTime.Now.ToString("MMddyyyyhhmm"),  e.Name );
+            Log.Information($"{e.ChangeType.ToString()}: {e.FullPath}");
+        }
+        public void moveFileHandler(object sender, FileSystemEventArgs e)
+        {
+            
+
+            Log.Information("File created: {name}", e.Name);
+            var _movePath = Path.Join(Rules.MoveFilePath, DateTime.Now.ToString("MMddyyyyhhmm"), e.Name);
 
             Directory.CreateDirectory(Path.Join(Rules.MoveFilePath, DateTime.Now.ToString("MMddyyyyhhmm")));
-            try
+
+
+            bool _FileMoved = false;
+            while (_FileMoved == false)
             {
-                File.Move(e.FullPath, _movePath);
-            } 
-            catch (Exception ex) 
-            {
-                MessageBox.Show(ex.ToString());
+                try
+                {
+                    if (File.Exists(e.FullPath))
+                    {
+                        File.Move(e.FullPath, _movePath);
+                        _FileMoved = true;
+                        Log.Information("Moved!");
+                    } else
+                    {
+                        Log.Warning("File no longer exists!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Information("Not able to move file: {Ex}", ex.ToString());
+                }
+                System.Threading.Thread.Sleep(1000);
             }
-            
-           
+
+
+
         }
-   
 
-        public static void OnError(object sender, ErrorEventArgs e) =>
-            PrintException(e.GetException());
 
-        public static void PrintException(Exception? ex)
+        public static void OnError(object sender, ErrorEventArgs e)
         {
-            if (ex != null)
-            {
-                Console.WriteLine($"Message: {ex.Message}");
-                Console.WriteLine("Stacktrace:");
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine();
-                PrintException(ex.InnerException);
-            }
-
+            Log.Error("Error with FileSystemWatcher: {Ex}", e.GetException().Message);
         }
+
+
+
     }
+
+
 }
