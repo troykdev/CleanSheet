@@ -34,11 +34,13 @@ namespace CleanSheet
             this.StartButton = new System.Windows.Forms.Button();
             this.StopButton = new System.Windows.Forms.Button();
             this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.dirCountLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // StartButton
             // 
-            this.StartButton.Location = new System.Drawing.Point(90, 45);
+            this.StartButton.Location = new System.Drawing.Point(185, 89);
             this.StartButton.Name = "StartButton";
             this.StartButton.Size = new System.Drawing.Size(75, 23);
             this.StartButton.TabIndex = 0;
@@ -48,7 +50,7 @@ namespace CleanSheet
             // 
             // StopButton
             // 
-            this.StopButton.Location = new System.Drawing.Point(90, 74);
+            this.StopButton.Location = new System.Drawing.Point(185, 118);
             this.StopButton.Name = "StopButton";
             this.StopButton.Size = new System.Drawing.Size(75, 23);
             this.StopButton.TabIndex = 1;
@@ -62,11 +64,31 @@ namespace CleanSheet
             this.TrayIcon.Visible = true;
             this.TrayIcon.Click += new System.EventHandler(this.TrayIcon_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 32);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(174, 15);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Total directories being watched:";
+            // 
+            // dirCountLabel
+            // 
+            this.dirCountLabel.AutoSize = true;
+            this.dirCountLabel.Location = new System.Drawing.Point(222, 32);
+            this.dirCountLabel.Name = "dirCountLabel";
+            this.dirCountLabel.Size = new System.Drawing.Size(13, 15);
+            this.dirCountLabel.TabIndex = 3;
+            this.dirCountLabel.Text = "0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(272, 143);
+            this.Controls.Add(this.dirCountLabel);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.StopButton);
             this.Controls.Add(this.StartButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -76,6 +98,7 @@ namespace CleanSheet
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -84,6 +107,8 @@ namespace CleanSheet
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.Button StopButton;
         private System.Windows.Forms.NotifyIcon TrayIcon;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label dirCountLabel;
     }
 }
 

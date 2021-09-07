@@ -34,14 +34,16 @@ namespace CleanSheet
         private void StartButton_Click(object sender, EventArgs e)
         {
 
-            var _RuleZip = new WatcherRule();
-            _RuleZip.FilePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-            _RuleZip.MoveFilePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "ZIPs");
-            _RuleZip.Filter = "*.zip";
-            Stalker _stalkerzip = new Stalker();
-            _stalkerzip.Start(_RuleZip, Log);
-            Stalkers.Add(_stalkerzip);
-            
+
+            foreach (WatcherRule rule in ConfigHelper.LoadConfigFiles())
+            {
+                var _rule = rule;
+                Stalker _stalker = new Stalker();
+                _stalker.Start(_rule, Log);
+                Stalkers.Add(_stalker);
+            }
+
+            dirCountLabel.Text = Stalkers.Count().ToString();
 
         }
 

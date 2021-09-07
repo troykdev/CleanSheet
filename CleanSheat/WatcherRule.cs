@@ -9,7 +9,6 @@ namespace CleanSheet
 {
     class WatcherRule
     {
-        public bool MoveFile = true;
         public string FilePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
         public string MoveFilePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "SDFs");
         public string Filter = "*.sdf";
