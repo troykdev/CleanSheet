@@ -26,7 +26,7 @@ namespace CleanSheet
         private static WatcherRule SerializeConfig(string path)
         {
             var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance)  // see height_in_inches in sample yml 
+                .WithNamingConvention(CamelCaseNamingConvention.Instance) 
                 .Build();
             var rule = deserializer.Deserialize<WatcherRule>(File.ReadAllText(path));
             return rule;

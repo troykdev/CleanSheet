@@ -50,9 +50,9 @@ namespace CleanSheet
         private void TrayIcon_Click(object sender, EventArgs e)
         {
           
-                ShowInTaskbar = true;
-                TrayIcon.Visible = false;
-                Show();
+            ShowInTaskbar = true;
+            TrayIcon.Visible = false;
+            this.WindowState = FormWindowState.Normal;
 
 
         }
@@ -65,6 +65,16 @@ namespace CleanSheet
                 TrayIcon.Visible = true;
             }
 
+        }
+
+        private void StopButton_Click(object sender, EventArgs e)
+        {
+            foreach (Stalker stalker in Stalkers)
+            {
+                stalker.Stop();
+            }
+            Stalkers.Clear();
+            dirCountLabel.Text = Stalkers.Count().ToString();
         }
     }
 }

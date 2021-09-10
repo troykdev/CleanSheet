@@ -56,6 +56,7 @@ namespace CleanSheet
             this.StopButton.TabIndex = 1;
             this.StopButton.Text = "Stop";
             this.StopButton.UseVisualStyleBackColor = true;
+            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
             // 
             // TrayIcon
             // 
@@ -86,7 +87,7 @@ namespace CleanSheet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(272, 143);
+            this.ClientSize = new System.Drawing.Size(273, 156);
             this.Controls.Add(this.dirCountLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.StopButton);
@@ -94,7 +95,7 @@ namespace CleanSheet
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Clean Sheet";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.ResumeLayout(false);
